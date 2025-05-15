@@ -1,0 +1,57 @@
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+}
+
+.header-container {
+  max-width: 34.375rem;
+  margin: 0 auto;
+}
+
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.search-form {
+  text-align: center;
+}
+
+main {
+  max-width: 34.375rem;
+  margin: 0 auto;
+}
+
+.movie-card {
+  display: flex;
+  align-items: center;
+}
+
+.movie-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.movie-title {
+  display: flex;
+  align-items: center;
+}
+
+.movie-subheading {
+  display: flex;
+  align-items: center;
+}
+
+.movie-poster {
+  width: 5.625rem;
+  height: 9.0625rem;
+  object-fit: cover;
+}
