@@ -6,12 +6,25 @@
   padding: 0;
 }
 
+/* Layout */
 body {
   font-family: "Inter", sans-serif;
 }
 
+header {
+  background-image: url("./images/background.png");
+  background-color: rgba(0, 0, 0, 0.9);
+  background-size: cover;
+  background-position: center;
+}
+
 .header-container {
   max-width: 34.375rem;
+  height: 18.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3.125rem;
   margin: 0 auto;
 }
 
@@ -21,37 +34,125 @@ body {
   justify-content: space-between;
 }
 
-.search-form {
-  text-align: center;
-}
-
 main {
   max-width: 34.375rem;
-  margin: 0 auto;
+  margin: 2.75rem auto;
 }
 
+/* Form & Input */
+.search-form {
+  display: flex;
+  justify-content: center;
+}
+
+.search-bar {
+  font-size: 0.875rem;
+  width: 100%;
+  background-color: white;
+  border: 1px solid #d1d5db;
+  padding: 0.5625rem 0.6875rem;
+  border-top-left-radius: 0.3125rem;
+  border-bottom-left-radius: 0.3125rem;
+}
+
+.search-bar::placeholder {
+  color: #6b7280;
+}
+
+/* Card */
 .movie-card {
   display: flex;
   align-items: center;
+  padding: 1.3125rem 0 1.75rem 0;
+  border-bottom: 1px solid #e5e7eb;
+  gap: 1.3125rem;
 }
 
 .movie-content {
   display: flex;
   flex-direction: column;
+  gap: 0.6875rem;
 }
 
 .movie-title {
   display: flex;
   align-items: center;
+  gap: 0.5rem;
 }
 
 .movie-subheading {
   display: flex;
   align-items: center;
+  font-size: 0.75rem;
+  color: #111827;
+  gap: 1.1875rem;
 }
 
 .movie-poster {
   width: 5.625rem;
   height: 9.0625rem;
   object-fit: cover;
+}
+
+/* Typography */
+h1 {
+  font-weight: 800;
+  font-size: 2.6875rem;
+  color: white;
+}
+
+h2 {
+  font-weight: 500;
+  font-size: 1.125rem;
+}
+
+.rating {
+  font-size: 0.75rem;
+  color: #111827;
+}
+
+.rating i {
+  color: #fec654;
+}
+
+.plot {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+/* Link & Button */
+.watchlist-a {
+  text-decoration: none;
+  color: white;
+}
+
+.search-btn {
+  font-family: "Inter", sans-serif;
+  font-size: 0.875rem;
+  border: 1px solid #d1d5db;
+  background-color: #f9fafb;
+  color: #374151;
+  padding: 0.5625rem 2.125rem;
+  border-top-right-radius: 0.3125rem;
+  border-bottom-right-radius: 0.3125rem;
+}
+
+.search-btn:hover,
+.search-btn:focus {
+  cursor: pointer;
+  background-color: #d1d5db;
+}
+
+.add-watchlist-btn {
+  font-family: "Inter", sans-serif;
+  font-size: 0.75rem;
+  border: none;
+  background-color: transparent;
+  color: #111827;
+}
+
+.add-watchlist-btn:hover,
+.add-watchlist-btn:focus {
+  cursor: pointer;
+  color: #374151;
 }

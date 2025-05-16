@@ -24,18 +24,28 @@ async function handleSearch(e) {
     movieDetails.forEach((movie, index) => {
       movieHtml += `
             <article class="movie-card">
-                <img src="${movie.Poster}" alt="${movie.Title} Poster" class="movie-poster">
+                <img
+                  src="${movie.Poster}" 
+                  alt="${movie.Title} Poster"
+                  class="movie-poster"
+                >
                 <div class="movie-content">
                     <div class="movie-title">
                         <h2>${movie.Title}</h2>
-                        <p>${movie.Ratings[0].Value}</p>
+                        <p class="rating">
+                          <i class="fa-solid fa-star"></i>
+                          ${movie.Ratings[0].Value.slice(0, -3)}
+                        </p>
                     </div>
                     <div class="movie-subheading">
                         <p>${movie.Runtime}</p>
                         <p>${movie.Genre}</p>
-                        <button class="add-watchlist-btn">Watchlist</button>
+                        <button class="add-watchlist-btn">
+                          <i class="fa-solid fa-circle-plus"></i>
+                          Watchlist
+                        </button>
                     </div>
-                    <p>${movie.Plot}</p>
+                    <p class="plot">${movie.Plot}</p>
                 </div>
             </article>
         `;
