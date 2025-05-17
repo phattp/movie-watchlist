@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="../css/style.css" />
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,31 +19,23 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    <title>Movie Watchlist</title>
+    <title>My Watchlist</title>
   </head>
   <body>
     <header>
       <div class="header-container">
         <div class="hero">
-          <h1>Find your film</h1>
-          <a class="watchlist-a" href="html/watchlist.html">My Watchlist</a>
+          <h1>My Watchlist</h1>
+          <a class="search-movie-a" href="../index.html">Search for movies</a>
         </div>
-        <form id="search-form" class="search-form">
-          <input
-            type="text"
-            placeholder="Search for a movie"
-            aria-label="search-bar"
-            name="search-bar"
-            class="search-bar"
-          />
-          <button type="submit" class="search-btn">Search</button>
-        </form>
       </div>
     </header>
     <main>
-      <i class="fa-solid fa-film film-icon"></i>
-      <h2>Start Exploring</h2>
+      <h2>Your watchlist is looking a little empty...</h2>
+      <a class="add-movie-a" href="../index.html"
+        ><i class="fa-solid fa-circle-plus"></i> Let's add some movies!</a
+      >
     </main>
-    <script src="/js/index.js" type="module"></script>
+    <script src="../js/watchlist.js" type="module"></script>
   </body>
 </html>

@@ -1,10 +1,22 @@
+import { API_KEY } from "./config.js";
+let myWatchlist = JSON.parse(localStorage.getItem("myWatchlist")) || [];
 const searchForm = document.getElementById("search-form");
 
 searchForm.addEventListener("submit", handleSearch);
 
 document.addEventListener("click", (e) => {
   if (e.target.dataset.imdbid) {
-    console.log(e.target.dataset.imdbid);
+    if (!myWatchlist.includes(e.target.dataset.imdbid)) {
+      myWatchlist.push(e.target.dataset.imdbid);
+    }
+
+    localStorage.setItem("myWatchlist", JSON.stringify(myWatchlist));
+    e.target.innerHTML = `
+      <i class="fa-solid fa-circle-check"></i> Added to Watchlist
+    `;
+    e.target.style.color = "#63E6BE";
+    e.target.disabled = true;
+    e.target.style.cursor = "auto";
   }
 });
 
@@ -15,7 +27,7 @@ async function handleSearch(e) {
   const searchValue = searchFormData.get("search-bar");
 
   const response = await fetch(
-    `http://www.omdbapi.com/?apikey=3e17a545&s=${searchValue}`
+    `http://www.omdbapi.com/?apikey=${API_KEY}&s=${searchValue}`
   );
   const data = await response.json();
 
@@ -27,7 +39,7 @@ async function handleSearch(e) {
     const movieDetails = await Promise.all(movieDetailsPromises);
 
     let movieCardHtml = "";
-    movieDetails.forEach((movie, index) => {
+    movieDetails.forEach((movie) => {
       movieCardHtml += `
             <article class="movie-card">
                 <img
@@ -46,9 +58,10 @@ async function handleSearch(e) {
                     <div class="movie-subheading">
                         <p>${movie.Runtime}</p>
                         <p>${movie.Genre}</p>
-                        <button class="add-watchlist-btn" data-imdbid="${
-                          movie.imdbID
-                        }">
+                        <button 
+                          class="add-watchlist-btn"
+                          data-imdbid="${movie.imdbID}"
+                        >
                           <i class="fa-solid fa-circle-plus"></i>
                           Watchlist
                         </button>
@@ -64,6 +77,7 @@ async function handleSearch(e) {
     `;
 
     document.querySelector("main").innerHTML = movieCardsHtml;
+    document.querySelector("main").style.justifyContent = "flex-start";
   } else {
     document.querySelector("main").innerHTML = `
       <i class="fa-solid fa-face-frown sad-icon"></i>
@@ -76,7 +90,7 @@ async function handleSearch(e) {
 
 async function fetchMovieDetail(id) {
   const response = await fetch(
-    `http://www.omdbapi.com/?apikey=3e17a545&i=${id}`
+    `http://www.omdbapi.com/?apikey=${API_KEY}&i=${id}`
   );
   const data = await response.json();
   return data;
