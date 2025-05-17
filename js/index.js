@@ -1,4 +1,6 @@
 import { API_KEY } from "./config.js";
+import { API_BASE_URL } from "./constants.js";
+
 let myWatchlist = JSON.parse(localStorage.getItem("myWatchlist")) || [];
 const searchForm = document.getElementById("search-form");
 
@@ -24,15 +26,20 @@ async function handleSearch(e) {
   e.preventDefault();
 
   const searchFormData = new FormData(searchForm);
-  const searchValue = searchFormData.get("search-bar");
+  const searchValue = searchFormData.get("search-bar").trim();
+  if (!searchValue) {
+    document.querySelector("main").innerHTML = `
+      <i class="fa-solid fa-magnifying-glass sad-icon"></i>
+      <h2 class="no-movie">Please enter a movie title</h2>
+    `;
+    document.querySelector("main").style.justifyContent = "center";
+    return;
+  }
 
-  const response = await fetch(
-    `http://www.omdbapi.com/?apikey=${API_KEY}&s=${searchValue}`
-  );
-  const data = await response.json();
+  const moviesResult = await fetchMoviesBySearch(searchValue);
 
-  if (data.Response === "True" && data.Search) {
-    const movieDetailsPromises = data.Search.map((movie) =>
+  if (moviesResult.Response === "True" && moviesResult.Search) {
+    const movieDetailsPromises = moviesResult.Search.map((movie) =>
       fetchMovieDetail(movie.imdbID)
     );
 
@@ -52,7 +59,11 @@ async function handleSearch(e) {
                         <h3>${movie.Title}</h3>
                         <p class="rating">
                           <i class="fa-solid fa-star"></i>
-                          ${movie.Ratings[0].Value.slice(0, -3)}
+                          ${
+                            movie.Ratings && movie.Ratings.length > 0
+                              ? movie.Ratings[0].Value.slice(0, -3)
+                              : "N/A"
+                          }
                         </p>
                     </div>
                     <div class="movie-subheading">
@@ -83,15 +94,22 @@ async function handleSearch(e) {
       <i class="fa-solid fa-face-frown sad-icon"></i>
       <h2 class="no-movie">No movies found. Try another search.</h2>
     `;
+    document.querySelector("main").style.justifyContent = "center";
   }
 
   searchForm.reset();
 }
 
-async function fetchMovieDetail(id) {
+async function fetchMoviesBySearch(searchTerm) {
   const response = await fetch(
-    `http://www.omdbapi.com/?apikey=${API_KEY}&i=${id}`
+    `${API_BASE_URL}?apikey=${API_KEY}&s=${searchTerm}`
   );
+  const data = await response.json();
+  return data;
+}
+
+async function fetchMovieDetail(id) {
+  const response = await fetch(`${API_BASE_URL}?apikey=${API_KEY}&i=${id}`);
   const data = await response.json();
   return data;
 }

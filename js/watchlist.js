@@ -1,4 +1,6 @@
 import { API_KEY } from "./config.js";
+import { API_BASE_URL } from "./constants.js";
+
 let myWatchlistArr = JSON.parse(localStorage.getItem("myWatchlist")) || [];
 
 if (myWatchlistArr) {
@@ -24,9 +26,7 @@ document.addEventListener("click", async (e) => {
 });
 
 async function fetchWatchlist(id) {
-  const response = await fetch(
-    `http://www.omdbapi.com/?apikey=${API_KEY}&i=${id}`
-  );
+  const response = await fetch(`${API_BASE_URL}?apikey=${API_KEY}&i=${id}`);
   const data = await response.json();
   return data;
 }
@@ -46,7 +46,11 @@ function renderWatchlist(watchlist) {
                     <h3>${movie.Title}</h3>
                     <p class="rating">
                         <i class="fa-solid fa-star"></i>
-                        ${movie.Ratings[0].Value.slice(0, -3)}
+                        ${
+                          movie.Ratings && movie.Ratings.length > 0
+                            ? movie.Ratings[0].Value.slice(0, -3)
+                            : "N/A"
+                        }
                     </p>
                 </div>
                 <div class="movie-subheading">
