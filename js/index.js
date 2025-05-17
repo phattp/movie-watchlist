@@ -22,7 +22,6 @@ document.addEventListener("click", (e) => {
 /**
  * Handles the search form submission.
  * Fetches and displays search results.
- * @param {Event} e - Form submit event
  */
 async function handleSearch() {
   const searchFormData = new FormData(searchForm);
