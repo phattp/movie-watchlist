@@ -1,4 +1,4 @@
 /**
  * Application constants for API endpoints and configuration.
  */
-export const API_BASE_URL = "http://www.omdbapi.com/";
+export const API_BASE_URL = "https://www.omdbapi.com/";
