@@ -1,39 +1,42 @@
 import { API_KEY } from "./config.js";
 import { API_BASE_URL } from "./constants.js";
+import { renderMovies, updateMainContent } from "./util.js";
 
 let myWatchlistArr = JSON.parse(localStorage.getItem("myWatchlist")) || [];
 
 document.addEventListener("DOMContentLoaded", async () => {
-  if (myWatchlistArr && myWatchlistArr.length > 0) {
-    try {
-      const myWatchlistPromises = myWatchlistArr.map((movie) =>
-        fetchWatchlist(movie)
-      );
-      const myWatchlistData = await Promise.all(myWatchlistPromises);
-      renderWatchlist(myWatchlistData);
-    } catch (error) {
-      console.error("Error loading watchlist:", error);
-      document.querySelector("main").innerHTML = `
-        <i class="fa-solid fa-triangle-exclamation sad-icon"></i>
-        <h2 class="no-movie">An error loading your watchlist. Please try again later.</h2>
-      `;
-    }
-  }
+  await loadWatchlist();
 });
 
 document.addEventListener("click", async (e) => {
   if (e.target.dataset.imdbid) {
-    myWatchlistArr = myWatchlistArr.filter(
-      (movie) => movie !== e.target.dataset.imdbid
-    );
-    localStorage.setItem("myWatchlist", JSON.stringify(myWatchlistArr));
-    const myWatchlistPromises = myWatchlistArr.map((movie) =>
-      fetchWatchlist(movie)
-    );
-    const myWatchlistData = await Promise.all(myWatchlistPromises);
-    renderWatchlist(myWatchlistData);
+    await removeFromWatchlist(e.target.dataset.imdbid);
   }
 });
+
+async function loadWatchlist() {
+  if (!myWatchlistArr && myWatchlistArr.length > 0) {
+    updateMainContent("emptyWatchlist");
+    return;
+  }
+
+  try {
+    updateMainContent("loading");
+    const watchlistData = await fetchAllWatchlistItems();
+    renderMovies(watchlistData, true);
+  } catch (error) {
+    console.error("Error loading watchlist:", error);
+    updateMainContent(
+      "error",
+      "An error loading your watchlist. Please try again later."
+    );
+  }
+}
+
+async function fetchAllWatchlistItems() {
+  const watchlistPromises = myWatchlistArr.map((id) => fetchWatchlist(id));
+  return await Promise.all(watchlistPromises);
+}
 
 async function fetchWatchlist(id) {
   const response = await fetch(`${API_BASE_URL}?apikey=${API_KEY}&i=${id}`);
@@ -41,57 +44,8 @@ async function fetchWatchlist(id) {
   return data;
 }
 
-function renderWatchlist(watchlist) {
-  if (!watchlist || watchlist.length === 0) {
-    document.querySelector("main").innerHTML = `
-        <h2>Your watchlist is looking a little empty...</h2>
-        <a class="add-movie-a" href="../index.html"><i class="fa-solid fa-circle-plus"></i> Let's add some movies!</a>
-    `;
-    document.querySelector("main").style.justifyContent = "center";
-    return;
-  }
-
-  let watchListHtml = "";
-  watchlist.forEach((movie) => {
-    watchListHtml += `
-        <article class="movie-card">
-            <img
-                src="${movie.Poster}"
-                alt="${movie.Title} Poster"
-                class="movie-poster"
-            >
-            <div class="movie-content">
-                <div class="movie-title">
-                    <h3>${movie.Title}</h3>
-                    <p class="rating">
-                        <i class="fa-solid fa-star"></i>
-                        ${
-                          movie.Ratings && movie.Ratings.length > 0
-                            ? movie.Ratings[0].Value.slice(0, -3)
-                            : "N/A"
-                        }
-                    </p>
-                </div>
-                <div class="movie-subheading">
-                    <p>${movie.Runtime}</p>
-                    <p>${movie.Genre}</p>
-                    <button class="add-watchlist-btn" data-imdbid="${
-                      movie.imdbID
-                    }">
-                        <i class="fa-solid fa-circle-minus"></i>
-                        Remove
-                    </button>
-                </div>
-                <p class="plot">${movie.Plot}</p>
-            </div>
-        </article>
-    `;
-  });
-
-  const watchlistCardsHtml = `
-      <section class="movie-cards">${watchListHtml}</section>
-    `;
-
-  document.querySelector("main").innerHTML = watchlistCardsHtml;
-  document.querySelector("main").style.justifyContent = "flex-start";
+async function removeFromWatchlist(imdbID) {
+  myWatchlistArr = myWatchlistArr.filter((id) => id !== imdbID);
+  localStorage.setItem("myWatchlist", JSON.stringify(myWatchlistArr));
+  await loadWatchlist();
 }

@@ -97,6 +97,6 @@ export function renderMovies(movies, isWatchlist = false) {
     moviesHtml += createMovieCardHtml(movie, isWatchlist);
   });
 
-  mainElement.innerHtml = `<section class="movie-cards">${moviesHtml}</section>`;
+  mainElement.innerHTML = `<section class="movie-cards">${moviesHtml}</section>`;
   mainElement.style.justifyContent = "flex-start";
 }
