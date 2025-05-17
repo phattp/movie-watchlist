@@ -15,7 +15,7 @@ document.addEventListener("click", async (e) => {
 });
 
 async function loadWatchlist() {
-  if (!myWatchlistArr && myWatchlistArr.length > 0) {
+  if (!myWatchlistArr || myWatchlistArr.length === 0) {
     updateMainContent("emptyWatchlist");
     return;
   }
