@@ -8,7 +8,10 @@ let myWatchlist = JSON.parse(localStorage.getItem("myWatchlist")) || [];
 const searchForm = document.getElementById("search-form");
 
 // Event listeners
-searchForm.addEventListener("submit", handleSearch);
+searchForm.addEventListener("submit", function (e) {
+  e.preventDefault();
+  handleSearch();
+});
 
 document.addEventListener("click", (e) => {
   if (e.target.dataset.imdbid) {
@@ -21,9 +24,7 @@ document.addEventListener("click", (e) => {
  * Fetches and displays search results.
  * @param {Event} e - Form submit event
  */
-async function handleSearch(e) {
-  e.preventDefault();
-
+async function handleSearch() {
   const searchFormData = new FormData(searchForm);
   const searchValue = searchFormData.get("search-bar").trim();
 
