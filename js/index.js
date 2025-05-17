@@ -36,18 +36,26 @@ async function handleSearch(e) {
     return;
   }
 
-  const moviesResult = await fetchMoviesBySearch(searchValue);
+  document.querySelector("main").innerHTML = `
+      <i class="fa-solid fa-spinner fa-spin film-icon"></i>
+      <h2>Searching for movies...</h2>
+    </div>
+  `;
+  document.querySelector("main").style.justifyContent = "center";
 
-  if (moviesResult.Response === "True" && moviesResult.Search) {
-    const movieDetailsPromises = moviesResult.Search.map((movie) =>
-      fetchMovieDetail(movie.imdbID)
-    );
+  try {
+    const moviesResult = await fetchMoviesBySearch(searchValue);
 
-    const movieDetails = await Promise.all(movieDetailsPromises);
+    if (moviesResult.Response === "True" && moviesResult.Search) {
+      const movieDetailsPromises = moviesResult.Search.map((movie) =>
+        fetchMovieDetail(movie.imdbID)
+      );
 
-    let movieCardHtml = "";
-    movieDetails.forEach((movie) => {
-      movieCardHtml += `
+      const movieDetails = await Promise.all(movieDetailsPromises);
+
+      let movieCardHtml = "";
+      movieDetails.forEach((movie) => {
+        movieCardHtml += `
             <article class="movie-card">
                 <img
                   src="${movie.Poster}" 
@@ -81,23 +89,31 @@ async function handleSearch(e) {
                 </div>
             </article>
         `;
-    });
+      });
 
-    const movieCardsHtml = `
-      <section class="movie-cards">${movieCardHtml}</section>
-    `;
+      const movieCardsHtml = `
+        <section class="movie-cards">${movieCardHtml}</section>
+      `;
 
-    document.querySelector("main").innerHTML = movieCardsHtml;
-    document.querySelector("main").style.justifyContent = "flex-start";
-  } else {
-    document.querySelector("main").innerHTML = `
+      document.querySelector("main").innerHTML = movieCardsHtml;
+      document.querySelector("main").style.justifyContent = "flex-start";
+    } else {
+      document.querySelector("main").innerHTML = `
       <i class="fa-solid fa-face-frown sad-icon"></i>
       <h2 class="no-movie">No movies found. Try another search.</h2>
     `;
+      document.querySelector("main").style.justifyContent = "center";
+    }
+
+    searchForm.reset();
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    document.querySelector("main").innerHTML = `
+      <i class="fa-solid fa-triangle-exclamation sad-icon"></i>
+      <h2 class="no-movie">An error occurred. Please try again later.</h2>
+    `;
     document.querySelector("main").style.justifyContent = "center";
   }
-
-  searchForm.reset();
 }
 
 async function fetchMoviesBySearch(searchTerm) {

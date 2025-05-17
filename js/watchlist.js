@@ -3,13 +3,23 @@ import { API_BASE_URL } from "./constants.js";
 
 let myWatchlistArr = JSON.parse(localStorage.getItem("myWatchlist")) || [];
 
-if (myWatchlistArr) {
-  const myWatchlistPromises = myWatchlistArr.map((movie) =>
-    fetchWatchlist(movie)
-  );
-  const myWatchlistData = await Promise.all(myWatchlistPromises);
-  renderWatchlist(myWatchlistData);
-}
+document.addEventListener("DOMContentLoaded", async () => {
+  if (myWatchlistArr && myWatchlistArr.length > 0) {
+    try {
+      const myWatchlistPromises = myWatchlistArr.map((movie) =>
+        fetchWatchlist(movie)
+      );
+      const myWatchlistData = await Promise.all(myWatchlistPromises);
+      renderWatchlist(myWatchlistData);
+    } catch (error) {
+      console.error("Error loading watchlist:", error);
+      document.querySelector("main").innerHTML = `
+        <i class="fa-solid fa-triangle-exclamation sad-icon"></i>
+        <h2 class="no-movie">An error loading your watchlist. Please try again later.</h2>
+      `;
+    }
+  }
+});
 
 document.addEventListener("click", async (e) => {
   if (e.target.dataset.imdbid) {
@@ -32,6 +42,15 @@ async function fetchWatchlist(id) {
 }
 
 function renderWatchlist(watchlist) {
+  if (!watchlist || watchlist.length === 0) {
+    document.querySelector("main").innerHTML = `
+        <h2>Your watchlist is looking a little empty...</h2>
+        <a class="add-movie-a" href="../index.html"><i class="fa-solid fa-circle-plus"></i> Let's add some movies!</a>
+    `;
+    document.querySelector("main").style.justifyContent = "center";
+    return;
+  }
+
   let watchListHtml = "";
   watchlist.forEach((movie) => {
     watchListHtml += `
