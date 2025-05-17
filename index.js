@@ -20,9 +20,9 @@ async function handleSearch(e) {
 
     const movieDetails = await Promise.all(movieDetailsPromises);
 
-    let movieHtml = "";
+    let movieCardHtml = "";
     movieDetails.forEach((movie, index) => {
-      movieHtml += `
+      movieCardHtml += `
             <article class="movie-card">
                 <img
                   src="${movie.Poster}" 
@@ -31,7 +31,7 @@ async function handleSearch(e) {
                 >
                 <div class="movie-content">
                     <div class="movie-title">
-                        <h2>${movie.Title}</h2>
+                        <h3>${movie.Title}</h3>
                         <p class="rating">
                           <i class="fa-solid fa-star"></i>
                           ${movie.Ratings[0].Value.slice(0, -3)}
@@ -51,10 +51,16 @@ async function handleSearch(e) {
         `;
     });
 
-    document.querySelector("main").innerHTML = movieHtml;
+    const movieCardsHtml = `
+      <section class="movie-cards">${movieCardHtml}</section>
+    `;
+
+    document.querySelector("main").innerHTML = movieCardsHtml;
   } else {
-    document.querySelector("main").innerHTML =
-      "<p>No movies found. Try another search.</p>";
+    document.querySelector("main").innerHTML = `
+      <i class="fa-solid fa-face-frown sad-icon"></i>
+      <h2 class="no-movie">No movies found. Try another search.</h2>
+    `;
   }
 
   searchForm.reset();

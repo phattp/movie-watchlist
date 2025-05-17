@@ -9,6 +9,9 @@
 /* Layout */
 body {
   font-family: "Inter", sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 header {
@@ -36,7 +39,13 @@ header {
 
 main {
   max-width: 34.375rem;
-  margin: 2.75rem auto;
+  margin: 1.4375rem auto 2.75rem auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.625rem;
 }
 
 /* Form & Input */
@@ -102,6 +111,12 @@ h1 {
 }
 
 h2 {
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: #dfdddd;
+}
+
+h3 {
   font-weight: 500;
   font-size: 1.125rem;
 }
@@ -118,6 +133,20 @@ h2 {
 .plot {
   font-size: 0.875rem;
   color: #6b7280;
+}
+
+.no-movie {
+  color: #6b7280;
+}
+
+.film-icon {
+  color: #dfdddd;
+  font-size: 3.125rem;
+}
+
+.sad-icon {
+  color: #6b7280;
+  font-size: 3.125rem;
 }
 
 /* Link & Button */
