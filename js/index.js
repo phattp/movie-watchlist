@@ -9,17 +9,7 @@ searchForm.addEventListener("submit", handleSearch);
 
 document.addEventListener("click", (e) => {
   if (e.target.dataset.imdbid) {
-    if (!myWatchlist.includes(e.target.dataset.imdbid)) {
-      myWatchlist.push(e.target.dataset.imdbid);
-    }
-
-    localStorage.setItem("myWatchlist", JSON.stringify(myWatchlist));
-    e.target.innerHTML = `
-      <i class="fa-solid fa-circle-check"></i> Added to Watchlist
-    `;
-    e.target.style.color = "#63E6BE";
-    e.target.disabled = true;
-    e.target.style.cursor = "auto";
+    addToWatchlist(e.target.dataset.imdbid, e.target);
   }
 });
 
@@ -72,4 +62,18 @@ async function fetchMovieDetail(id) {
   const response = await fetch(`${API_BASE_URL}?apikey=${API_KEY}&i=${id}`);
   const data = await response.json();
   return data;
+}
+
+function addToWatchlist(imdbID, button) {
+  if (!myWatchlist.includes(imdbID)) {
+    myWatchlist.push(imdbID);
+  }
+
+  localStorage.setItem("myWatchlist", JSON.stringify(myWatchlist));
+  button.innerHTML = `
+    <i class="fa-solid fa-circle-check"></i> Added to Watchlist
+  `;
+  button.style.color = "#63E6BE";
+  button.disabled = true;
+  button.style.cursor = "auto";
 }

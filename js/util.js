@@ -44,7 +44,7 @@ export function updateMainContent(type, message = "") {
     case "loading":
       mainElement.innerHTML = `
         <i class="fa-solid fa-spinner fa-spin film-icon"></i>
-        <h2>Searching for movies...</h2>
+        <h2>${message || "Searching for movies..."}</h2>
       `;
       mainElement.style.justifyContent = "center";
       break;

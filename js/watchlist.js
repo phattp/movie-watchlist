@@ -21,7 +21,7 @@ async function loadWatchlist() {
   }
 
   try {
-    updateMainContent("loading");
+    updateMainContent("loading", "Loading your watchlist...");
     const watchlistData = await fetchAllWatchlistItems();
     renderMovies(watchlistData, true);
   } catch (error) {
