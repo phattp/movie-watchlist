@@ -2,6 +2,12 @@ const searchForm = document.getElementById("search-form");
 
 searchForm.addEventListener("submit", handleSearch);
 
+document.addEventListener("click", (e) => {
+  if (e.target.dataset.imdbid) {
+    console.log(e.target.dataset.imdbid);
+  }
+});
+
 async function handleSearch(e) {
   e.preventDefault();
 
@@ -40,7 +46,9 @@ async function handleSearch(e) {
                     <div class="movie-subheading">
                         <p>${movie.Runtime}</p>
                         <p>${movie.Genre}</p>
-                        <button class="add-watchlist-btn">
+                        <button class="add-watchlist-btn" data-imdbid="${
+                          movie.imdbID
+                        }">
                           <i class="fa-solid fa-circle-plus"></i>
                           Watchlist
                         </button>
