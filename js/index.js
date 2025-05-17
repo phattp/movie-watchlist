@@ -8,7 +8,7 @@ let myWatchlist = JSON.parse(localStorage.getItem("myWatchlist")) || [];
 const searchForm = document.getElementById("search-form");
 
 // Event listeners
-searchForm.addEventListener("submit", function (e) {
+searchForm.addEventListener("submit", (e) => {
   e.preventDefault();
   handleSearch();
 });
