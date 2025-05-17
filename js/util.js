@@ -1,3 +1,9 @@
+/**
+ * Creates HTML for a movie card with appropriate buttons based on context.
+ * @param {Object} movie - Movie data from API
+ * @param {boolean} isWatchlist - Whether this card is shown in the watchlist view
+ * @returns {string} HTML string for the movie card
+ */
 export function createMovieCardHtml(movie, isWatchlist = false) {
   const buttonHtml = isWatchlist
     ? `<button class="add-watchlist-btn" data-imdbid="${movie.imdbID}">
@@ -37,6 +43,12 @@ export function createMovieCardHtml(movie, isWatchlist = false) {
     `;
 }
 
+/**
+ * Updates the main content area based on different application states.
+ * @param {string} type - The type of content to display (loading, error, noResults, etc.)
+ * @param {string} message - Optional custom message to display
+ * @returns {HTMLElement} The updated main element
+ */
 export function updateMainContent(type, message = "") {
   const mainElement = document.querySelector("main");
 
@@ -89,6 +101,11 @@ export function updateMainContent(type, message = "") {
   return mainElement;
 }
 
+/**
+ * Renders a list of movies to the main content area.
+ * @param {Array<Object>} movies - Array of movie objects to render
+ * @param {boolean} isWatchlist - Whether this is the watchlist view
+ */
 export function renderMovies(movies, isWatchlist = false) {
   const mainElement = document.querySelector("main");
 

@@ -1,10 +1,13 @@
+// Import necessary modules
 import { API_KEY } from "./config.js";
 import { API_BASE_URL } from "./constants.js";
 import { updateMainContent, renderMovies } from "./util.js";
 
+// Initialize watchlist from localStorage or create empty array if none exists
 let myWatchlist = JSON.parse(localStorage.getItem("myWatchlist")) || [];
 const searchForm = document.getElementById("search-form");
 
+// Event listeners
 searchForm.addEventListener("submit", handleSearch);
 
 document.addEventListener("click", (e) => {
@@ -13,6 +16,11 @@ document.addEventListener("click", (e) => {
   }
 });
 
+/**
+ * Handles the search form submission.
+ * Fetches and displays search results.
+ * @param {Event} e - Form submit event
+ */
 async function handleSearch(e) {
   e.preventDefault();
 
@@ -43,6 +51,11 @@ async function handleSearch(e) {
   }
 }
 
+/**
+ * Searches for movies by title.
+ * @param {string} searchTerm - The movie title to search for
+ * @returns {Promise<Object>} - Search results from OMDB API
+ */
 async function fetchMoviesBySearch(searchTerm) {
   const response = await fetch(
     `${API_BASE_URL}?apikey=${API_KEY}&s=${searchTerm}`
@@ -51,6 +64,11 @@ async function fetchMoviesBySearch(searchTerm) {
   return data;
 }
 
+/**
+ * Fetches detailed information for each movie in search results.
+ * @param {Array<Object>} searchResults - Basic movie data from search
+ * @returns {Promise<Array<Object>>} - Detailed movie data
+ */
 async function fetchAllMovieDetails(searchResults) {
   const movieDetailsPromises = searchResults.map((movie) =>
     fetchMovieDetail(movie.imdbID)
@@ -58,12 +76,22 @@ async function fetchAllMovieDetails(searchResults) {
   return await Promise.all(movieDetailsPromises);
 }
 
+/**
+ * Fetches detailed information for a single movie.
+ * @param {string} id - IMDB ID of the movie
+ * @returns {Promise<Object>} - Detailed movie data
+ */
 async function fetchMovieDetail(id) {
   const response = await fetch(`${API_BASE_URL}?apikey=${API_KEY}&i=${id}`);
   const data = await response.json();
   return data;
 }
 
+/**
+ * Adds a movie to the watchlist and updates the button state.
+ * @param {string} imdbID - IMDB ID of the movie to add
+ * @param {HTMLElement} button - The button element that was clicked
+ */
 function addToWatchlist(imdbID, button) {
   if (!myWatchlist.includes(imdbID)) {
     myWatchlist.push(imdbID);
